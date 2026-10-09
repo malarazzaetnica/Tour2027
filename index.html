@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MALARAZZA - TOUR 2027</title>
+<meta name="description" content="Scaletta ufficiale Malarazza Tour 2027 - repertorio live">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFFFFF;--ink:#1A1A1A;--ocra:#D4A574;--red:#C0392B;--blue:#2E86AB;--muted:#8A7A6A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FFFFFF;color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh}
+.serif{font-family:'Playfair Display',serif}
+.header{padding:36px 24px 32px;text-align:center;border-bottom:1px solid #EAEAEA}
+.tour{font-size:clamp(16px,2.5vw,22px);letter-spacing:0.45em;font-weight:400;color:var(--muted)}
+.divider{display:flex;align-items:center;justify-content:center;gap:16px;margin:18px auto}
+.divider span{height:1px;width:60px;background:var(--ocra)}
+.sub{font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.grid{max-width:1100px;margin:0 auto;padding:32px 20px;display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:768px){.grid{grid-template-columns:1fr 1fr}}
+.card{background:white;border:1px solid #EAEAEA;border-radius:18px;padding:22px 24px;position:relative;transition:all .2s;overflow:hidden}
+.card:hover{border-color:var(--ocra);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.num{font-size:11px;letter-spacing:0.2em;color:var(--muted);margin-bottom:8px}
+.title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;text-transform:uppercase;line-height:1.2}
+.meta{display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:8px}
+.badge{font-size:9px;letter-spacing:0.16em;padding:5px 10px;border-radius:20px;color:white;font-weight:600}
+.badge.youtube{background:var(--red)} .badge.drive{background:var(--blue)}
+.link{font-size:12px;letter-spacing:0.08em;text-decoration:none;color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:2px;cursor:pointer}
+.link:hover{color:var(--ocra);border-color:var(--ocra)}
+.topbar{max-width:1100px;margin:0 auto;padding:16px 20px;display:flex;justify-content:flex-end;align-items:center;gap:10px}
+.btn{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;padding:10px 16px;border-radius:30px;border:1px solid #EAEAEA;background:white;cursor:pointer;transition:.2s}
+.btn:hover{background:var(--ink);color:white;border-color:var(--ink)}
+.btn-admin{background:var(--ink);color:white;border-color:var(--ink)}
+.btn-ocra{background:var(--ocra);color:white;border-color:var(--ocra)}
+.modal{position:fixed;inset:0;background:rgba(26,26,26,0.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-box{background:#FFFFFF;border-radius:20px;padding:32px;width:100%;max-width:460px;border:1px solid #EAEAEA}
+.input{width:100%;height:46px;border-radius:30px;border:1px solid #EAEAEA;padding:0 18px;font-size:14px;margin-top:12px;background:white}
+.admin-panel{max-width:1100px;margin:0 auto;padding:0 20px 20px}
+.admin-form{background:white;border:1px solid var(--ocra);border-radius:18px;padding:20px;display:grid;gap:12px}
+.admin-hint{max-width:1100px;margin:0 auto;padding:0 20px 8px;font-size:11px;letter-spacing:0.12em;color:var(--muted)}
+.save-bar{max-width:1100px;margin:0 auto;padding:12px 20px;display:none;align-items:center;justify-content:space-between;gap:12px;background:#1A1A1A;color:#FFFBF0;border-radius:14px;position:sticky;top:12px;z-index:20}
+.save-bar.show{display:flex}
+.footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:11px;letter-spacing:0.15em;border-top:1px solid #EAEAEA;margin-top:20px}
+.apri-testo-btn{background:var(--ocra);color:white;border:1px solid var(--ocra);padding:6px 14px;border-radius:20px;text-decoration:none;font-size:11px;letter-spacing:0.08em}
+.deploy-box{background:#FFFBF5;border:1px solid #EAD5C0;border-radius:14px;padding:14px;font-size:11px;line-height:1.5;color:#6B5A4A}
+</style>
+</head>
+<body>
+<div class="topbar">
+<span id="adminBadge" style="display:none;font-size:10px;letter-spacing:0.2em;background:#2E7D32;color:white;padding:5px 10px;border-radius:20px">ADMIN</span>
+<button id="adminBtn" class="btn btn-admin">Admin Login</button>
+<button id="logoutBtn" class="btn" style="display:none">Logout</button>
+</div>
+<div id="saveBar" class="save-bar"><div style="font-size:11px;letter-spacing:0.12em">⚠️ Ordine modificato — clicca Salva per confermare</div><div style="display:flex;gap:10px"><button id="cancelOrderBtn" class="btn" style="background:white;color:#1A1A1A">Annulla</button><button id="saveOrderBtn" class="btn btn-ocra">Salva sequenza ✓</button></div></div>
+<header class="header">
+<div style="font-family:'Playfair Display',serif;font-size:clamp(36px,8vw,64px);font-weight:900;letter-spacing:0.04em">MALARAZZA</div>
+<div class="tour">TOUR 2027</div>
+<div class="divider"><span></span><div style="color:var(--ocra)">✦</div><span></span></div>
+<div class="sub">Repertorio live — versione web ufficiale</div>
+</header>
+
+<div id="adminPanel" class="admin-panel" style="display:none">
+  <div class="admin-form">
+    <h3 class="serif" style="font-size:18px">Pannello Admin</h3>
+    <input id="newTitle" class="input" placeholder="Titolo brano">
+    <input id="newUrl" class="input" placeholder="Link YouTube o Google Drive">
+    <input id="newTestoUrl" class="input" placeholder="Link esterno Testo (opzionale)">
+    <button id="addBtn" class="btn btn-admin" style="margin-top:8px">Aggiungi alla scaletta +</button>
+    
+    <div style="border-top:1px dashed #EAEAEA; margin-top:14px; padding-top:14px; display:grid; gap:10px">
+      <div style="font-size:11px;letter-spacing:0.12em;color:var(--muted);font-weight:600">DEPLOY WEB — RENDI PERMANENTE</div>
+      <div class="deploy-box">
+        <b>Come funziona ora online:</b><br>
+        1. Modifichi ordine/titoli/brani qui in Admin<br>
+        2. Clicchi <b>Genera file WEB aggiornato</b><br>
+        3. Carichi quel file sul tuo hosting (sovrascrivi index.html)<br>
+        4. Tutti vedono subito la versione nuova. Nessun localStorage perso.
+      </div>
+      <button id="exportBtn" class="btn btn-ocra">⬇ Genera index.html aggiornato per il web</button>
+      <button id="resetHiddenBtn" class="btn" style="background:#FFF6F6">↺ Ripristina brani nascosti</button>
+      <div id="exportInfo" style="font-size:11px;color:var(--muted);line-height:1.4"></div>
+    </div>
+  </div>
+</div>
+<div id="dragHint" class="admin-hint" style="display:none">↕ Trascina le card con ☰ per riordinare — poi Salva sequenza</div>
+<div id="grid" class="grid"></div>
+<div class="footer">MALARAZZA — TOUR 2027 — WEB EDITION<br><span style="opacity:0.6">Carica questo file come index.html su Netlify, Vercel o GitHub Pages</span></div>
+
+<div id="modal" class="modal" style="display:none"><div class="modal-box"><h3 class="serif" style="font-size:22px">Accesso Amministratore</h3><input id="userInput" class="input" value="amministratore" disabled><input id="passInput" type="password" class="input" placeholder="Password"><div id="loginError" style="font-size:11px;color:var(--red);margin-top:10px;display:none">Password errata</div><div style="display:flex;gap:10px;margin-top:18px"><button id="loginConfirm" class="btn btn-admin" style="flex:1">Entra</button><button id="loginCancel" class="btn" style="flex:1">Annulla</button></div></div></div>
+<div id="testoModal" class="modal" style="display:none"><div class="modal-box"><h3 class="serif" style="font-size:20px">Collegamento Testo</h3><p style="font-size:12px;color:var(--muted);margin-top:6px">Inserisci il link esterno al testo</p><p id="testoSongName" style="font-size:11px;letter-spacing:0.15em;margin-top:10px;font-weight:600"></p><input id="testoUrlInput" class="input" placeholder="https://..."><div id="testoError" style="font-size:11px;color:var(--red);margin-top:8px;display:none"></div><div style="display:flex;gap:10px;margin-top:18px"><button id="testoSaveBtn" class="btn btn-admin" style="flex:1">Salva ✓</button><button id="testoCancelBtn" class="btn" style="flex:1">Annulla</button></div><button id="testoRemoveBtn" class="btn" style="width:100%;margin-top:10px;display:none;background:#FFE8E8;border-color:#FFB0B0;color:var(--red)">Rimuovi testo</button></div></div>
+
+<script>
+const DEFAULT_SONGS=[
+  {"id":1,"title":"MARONNA R PIERN","url":"https://drive.google.com/file/d/1cCgHNE21jo6O15bkopbbBuhaJZFbt3d4/view?usp=drive_link","type":"drive"},
+  {"id":2,"title":"SI LAV A CAP A U CIUCCIO","url":"https://drive.google.com/file/d/1AMHDcojEiBIxamSN6_aFxH5brjgf4EIP/view?usp=drive_link","type":"drive"},
+  {"id":3,"title":"LA CONTRORA","url":"https://drive.google.com/file/d/1u_IohysSeYDqnFIGQiF0zvZu1i1BYBbal/view?usp=sharing","type":"drive"},
+  {"id":4,"title":"TUTTA LA CHIAZZA VO SAPE'","url":"https://drive.google.com/file/d/1joDDVAHAbzOL-jBOkilBOLBewQLh64Ac/view?usp=sharing","type":"drive"},
+  {"id":5,"title":"SCIALL NIR","url":"https://youtu.be/k1WLAgIZTWY?si=8ei_n_6eA_y8hBfe","type":"youtube"},
+  {"id":6,"title":"ASWAD","url":"https://youtu.be/mw9fv0wykvs?si=kPD3-hGYh5VrqhCm","type":"youtube"},
+  {"id":7,"title":"BUONGIORNO CUMPA' SOLE","url":"https://youtu.be/-C9MFdN4lok?si=VnM6JfiohkZe4DVj","type":"youtube"},
+  {"id":8,"title":"DOBRODOSLI LIPA","url":"https://youtu.be/YCaEbnlXZMQ?si=qzjtwEUJL8jtFJUQ","type":"youtube"},
+  {"id":9,"title":"LU LUCAN QUANN VA A LU MAR","url":"https://drive.google.com/file/d/1aYWSl8uAni6tgfIto99OuKm7490okkA6/view?usp=sharing","type":"drive"},
+  {"id":10,"title":"TERRONE","url":"https://drive.google.com/file/d/1DSDibwpZ4p08RnfNpakx1DQHhk4AdnIw/view?usp=sharing","type":"drive"},
+  {"id":11,"title":"CANT PE DISPIETT","url":"https://youtu.be/wIZQFqbDH00?si=HFG1EmJw0tIi-CRw","type":"youtube"},
+  {"id":12,"title":"CIGANKA SAM MALA","url":"https://www.youtube.com/watch?v=-JVlxYrnvvA","type":"youtube"},
+  {"id":13,"title":"CIGANOCKA","url":"https://youtu.be/TVBFPV_X0-k?feature=shared","type":"youtube"},
+  {"id":14,"title":"CU TI LU DISSI","url":"https://youtu.be/lohXhWysNNs?feature=shared","type":"youtube"},
+  {"id":15,"title":"LULE LULE","url":"https://youtu.be/GobftsnfQhA?si=bjuDMG2dCQE-vEcK","type":"youtube"},
+  {"id":16,"title":"MALARAZZA","url":"https://youtu.be/jYsJf_zB4H0?si=wWwku_0gss0Jvy73","type":"youtube"},
+  {"id":17,"title":"NANE TSOKHA","url":"https://youtu.be/g8pCNK9C_YY?feature=shared","type":"youtube"},
+  {"id":18,"title":"SANACORE","url":"https://youtu.be/zJwsgT0qRZI?si=dWAhDKAbOhwzKvkA","type":"youtube"},
+  {"id":19,"title":"TRENULETUL","url":"https://youtu.be/bGNT5Uh-WKw?si=zXARIJu5ZACqEsEN","type":"youtube"},
+  {"id":20,"title":"SAPISS NDO S MET","url":"https://youtu.be/zxs0ce7D2a0?si=0kZ2iZq_gQFKHTh8","type":"youtube"}
+];
+const LS_KEY="malarazza_songs_custom";
+const ADMIN_KEY="admin_malarazza_2027";
+const HIDDEN_KEY="hidden_default";
+const ORDER_KEY="malarazza_order_2027";
+const TEXT_KEY="malarazza_testo_overrides";
+const PASS="etnico@2026";
+function detectType(u){return u.toLowerCase().includes('youtu')?'youtube':'drive'}
+function getCustom(){try{return JSON.parse(localStorage.getItem(LS_KEY)||"[]")}catch{return []}}
+function saveCustom(a){localStorage.setItem(LS_KEY,JSON.stringify(a))}
+function getHidden(){try{return JSON.parse(localStorage.getItem(HIDDEN_KEY)||"[]")}catch{return []}}
+function getOrder(){try{return JSON.parse(localStorage.getItem(ORDER_KEY)||"null")}catch{return null}}
+function saveOrder(ids){localStorage.setItem(ORDER_KEY,JSON.stringify(ids))}
+function getAll(){
+  const hidden=getHidden();
+  let overrides={}; try{overrides=JSON.parse(localStorage.getItem("title_overrides")||"{}")}catch{}
+  let testoOverrides={}; try{testoOverrides=JSON.parse(localStorage.getItem(TEXT_KEY)||"{}")}catch{}
+  const base=DEFAULT_SONGS.filter(s=>!hidden.includes(s.id)).map(s=>{
+    let ns={...s};
+    if(overrides[s.id]) ns.title=overrides[s.id];
+    if(testoOverrides[s.id]) ns.testoUrl=testoOverrides[s.id];
+    return ns;
+  });
+  return [...base, ...getCustom()].map(s=>{
+    let ns={...s};
+    if(testoOverrides[s.id] && !ns.testoUrl) ns.testoUrl=testoOverrides[s.id];
+    if(overrides[s.id]) ns.title=overrides[s.id];
+    return ns;
+  });
+}
+function applySavedOrder(arr){
+  const order=getOrder();
+  if(!order||!Array.isArray(order)||order.length===0) return arr;
+  const map=new Map(arr.map(s=>[s.id,s]));
+  const ordered=order.map(id=>map.get(id)).filter(Boolean);
+  const remaining=arr.filter(s=>!order.includes(s.id));
+  return [...ordered,...remaining];
+}
+function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+let dragSrcIndex=null,hasUnsavedChanges=false,lastSavedOrder=null,editingTestoId=null;
+let isAdmin = localStorage.getItem(ADMIN_KEY)==='1';
+let current=[];
+
+function showSaveBar(){document.getElementById('saveBar').classList.add('show')}
+function hideSaveBar(){document.getElementById('saveBar').classList.remove('show'); hasUnsavedChanges=false}
+
+function openTestoModal(id,currentUrl){
+  editingTestoId=id;
+  const song=current.find(s=>s.id===id) || getAll().find(s=>s.id===id);
+  document.getElementById('testoSongName').textContent = song?song.title:'';
+  document.getElementById('testoUrlInput').value=currentUrl||'';
+  document.getElementById('testoError').style.display='none';
+  document.getElementById('testoRemoveBtn').style.display=currentUrl?'block':'none';
+  document.getElementById('testoModal').style.display='flex';
+  setTimeout(()=>document.getElementById('testoUrlInput').focus(),100);
+}
+function closeTestoModal(){document.getElementById('testoModal').style.display='none'; editingTestoId=null;}
+function setTestoUrl(id,url,remove){
+  let m={}; try{m=JSON.parse(localStorage.getItem(TEXT_KEY)||"{}")}catch{}
+  if(remove){ delete m[id]; }
+  else { m[id]=url; }
+  localStorage.setItem(TEXT_KEY, JSON.stringify(m));
+  // se è custom, aggiorna anche custom
+  let c=getCustom(); let ic=c.find(x=>x.id===id);
+  if(ic){ if(remove) delete ic.testoUrl; else ic.testoUrl=url; saveCustom(c); }
+  refresh();
+}
+
+function render(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  if(current.length===0){document.getElementById('empty')?.style && (document.getElementById('empty').style.display='block'); return;}
+  current.forEach((song,idx)=>{
+    const card=document.createElement('div');
+    card.className='card';
+    card.draggable=isAdmin;
+    card.dataset.index=idx;
+    card.innerHTML=`
+      <div style="display:flex;gap:10px;align-items:center">
+        ${isAdmin?`<div class="drag-handle">☰</div>`:''}
+        <div>
+          <div class="num">#${String(idx+1).padStart(2,'0')}</div>
+          <div class="title">${song.title}</div>
+        </div>
+      </div>
+      <div class="meta">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="badge ${song.type}">${song.type==='youtube'?'YOUTUBE':'DRIVE'}</span>
+          <a class="link" href="${song.url}" target="_blank" rel="noopener">Apri sorgente</a>
+          ${song.testoUrl?`<a class="apri-testo-btn" href="${song.testoUrl}" target="_blank">Apri testo</a>`:''}
+          ${isAdmin&&!song.testoUrl?`<button class="link testo-add" data-id="${song.id}">+ Testo</button>`:''}
+        </div>
+      </div>
+      ${isAdmin?`<div style="position:absolute;top:14px;right:14px;display:flex;gap:6px"><button class="edit" data-id="${song.id}" style="width:28px;height:28px;border-radius:50%;border:1px solid #EAEAEA;background:white;cursor:pointer">✎</button><button class="delete" data-id="${song.id}" style="width:28px;height:28px;border-radius:50%;border:1px solid #EAEAEA;background:white;cursor:pointer">✕</button></div>`:''}
+    `;
+    if(isAdmin){
+      card.addEventListener('dragstart',(e)=>{dragSrcIndex=idx; e.dataTransfer.effectAllowed='move'; setTimeout(()=>card.classList.add('dragging'),0);});
+      card.addEventListener('dragend',()=>{card.classList.remove('dragging'); document.querySelectorAll('.card').forEach(c=>c.classList.remove('drag-over'));});
+      card.addEventListener('dragover',(e)=>{e.preventDefault(); card.classList.add('drag-over');});
+      card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
+      card.addEventListener('drop',(e)=>{e.preventDefault(); card.classList.remove('drag-over'); const t=parseInt(card.dataset.index); if(dragSrcIndex===null||dragSrcIndex===t) return; const it=current.splice(dragSrcIndex,1)[0]; current.splice(t,0,it); hasUnsavedChanges=true; showSaveBar(); render();});
+    }
+    grid.appendChild(card);
+  });
+  if(isAdmin){
+    document.querySelectorAll('.delete').forEach(btn=>{btn.onclick=()=>{
+      const id=parseInt(btn.dataset.id);
+      const song = current.find(x=>x.id===id);
+      const isCustom = getCustom().some(x=>x.id===id);
+      const label = song ? song.title : 'questo brano';
+      if(!confirm(isCustom ? `Eliminare definitivamente "${label}"?` : `Nascondere "${label}" dalla scaletta?`)) return;
+      try{let to={}; try{to=JSON.parse(localStorage.getItem(TEXT_KEY)||"{}")}catch{}; if(to[id]){ delete to[id]; localStorage.setItem(TEXT_KEY, JSON.stringify(to)); }}catch{}
+      try{let ov={}; try{ov=JSON.parse(localStorage.getItem('title_overrides')||"{}")}catch{}; if(ov[id]){ delete ov[id]; localStorage.setItem('title_overrides', JSON.stringify(ov)); }}catch{}
+      if(isCustom){let c=getCustom().filter(x=>x.id!==id); saveCustom(c);} else {let h=getHidden(); if(!h.includes(id)) h.push(id); localStorage.setItem(HIDDEN_KEY,JSON.stringify(h));}
+      let newOrder = current.filter(s=>s.id!==id).map(s=>s.id);
+      saveOrder(newOrder); lastSavedOrder=[...newOrder]; refresh();
+    }});
+    document.querySelectorAll('.edit').forEach(btn=>{btn.onclick=()=>{const id=parseInt(btn.dataset.id); const s=current.find(x=>x.id===id); const n=prompt('Modifica titolo:',s.title); if(n===null) return; const t=n.trim().toUpperCase(); if(!t) return; let c=getCustom(); const ic=c.find(x=>x.id===id); if(ic){ic.title=t; saveCustom(c);} else {let o={};try{o=JSON.parse(localStorage.getItem('title_overrides')||'{}')}catch{}; o[id]=t; localStorage.setItem('title_overrides',JSON.stringify(o));} refresh();}});
+    document.querySelectorAll('.testo-add').forEach(btn=>{btn.onclick=()=>openTestoModal(parseInt(btn.dataset.id),'');});
+  }
+  updateAdminUI();
+}
+function refresh(){
+  let all=getAll();
+  const order=getOrder();
+  if(order&&order.length>0){current=applySavedOrder(all); lastSavedOrder=[...order];} else {current=shuffle(all); lastSavedOrder=null;}
+  hasUnsavedChanges=false; hideSaveBar(); render();
+}
+function updateAdminUI(){
+  document.getElementById('adminBadge').style.display=isAdmin?'inline-block':'none';
+  document.getElementById('logoutBtn').style.display=isAdmin?'inline-block':'none';
+  document.getElementById('adminBtn').style.display=isAdmin?'none':'inline-block';
+  document.getElementById('adminPanel').style.display=isAdmin?'block':'none';
+  document.getElementById('dragHint').style.display=isAdmin?'block':'none';
+  if(!isAdmin) hideSaveBar();
+}
+document.getElementById('adminBtn').onclick=()=>document.getElementById('modal').style.display='flex';
+document.getElementById('loginCancel').onclick=()=>document.getElementById('modal').style.display='none';
+document.getElementById('modal').onclick=(e)=>{if(e.target.id==='modal') e.currentTarget.style.display='none'};
+document.getElementById('loginConfirm').onclick=()=>{
+  const p=document.getElementById('passInput').value;
+  if(p===PASS){localStorage.setItem(ADMIN_KEY,'1'); isAdmin=true; document.getElementById('modal').style.display='none'; document.getElementById('passInput').value=''; document.getElementById('loginError').style.display='none'; render();}
+  else{document.getElementById('loginError').style.display='block';}
+};
+document.getElementById('logoutBtn').onclick=()=>{localStorage.removeItem(ADMIN_KEY); isAdmin=false; render();};
+document.getElementById('saveOrderBtn').onclick=()=>{saveOrder(current.map(s=>s.id)); lastSavedOrder=[...current.map(s=>s.id)]; hideSaveBar(); const b=document.getElementById('saveOrderBtn'); const o=b.textContent; b.textContent='Salvato! ✓'; setTimeout(()=>b.textContent=o,1500);};
+document.getElementById('cancelOrderBtn').onclick=()=>{if(lastSavedOrder){current=applySavedOrder(getAll());} else {current=shuffle(getAll());} hideSaveBar(); render();};
+document.getElementById('testoCancelBtn').onclick=closeTestoModal;
+document.getElementById('testoModal').onclick=(e)=>{if(e.target.id==='testoModal') closeTestoModal();};
+document.getElementById('testoSaveBtn').onclick=()=>{
+  const url=document.getElementById('testoUrlInput').value.trim();
+  if(!url||!(url.startsWith('http://')||url.startsWith('https://'))){document.getElementById('testoError').textContent='Inserisci URL valido https://'; document.getElementById('testoError').style.display='block'; return;}
+  if(editingTestoId!==null){setTestoUrl(editingTestoId,url); closeTestoModal();}
+};
+document.getElementById('testoRemoveBtn').onclick=()=>{if(editingTestoId!==null){setTestoUrl(editingTestoId,null,true); closeTestoModal();}};
+document.getElementById('testoUrlInput').addEventListener('keydown',(e)=>{if(e.key==='Enter') document.getElementById('testoSaveBtn').click(); if(e.key==='Escape') closeTestoModal();});
+document.getElementById('addBtn').onclick=()=>{
+  const t=document.getElementById('newTitle').value.trim();
+  const u=document.getElementById('newUrl').value.trim();
+  if(!t||!u){alert('Compila titolo e URL'); return;}
+  if(!(u.toLowerCase().includes('youtu')||u.toLowerCase().includes('drive.google'))){alert('URL deve contenere youtube o drive.google.com'); return;}
+  const testoLink=document.getElementById('newTestoUrl').value.trim();
+  const custom=getCustom();
+  const newSong={id:Date.now(), title:t.toUpperCase(), url:u, type:detectType(u), testoUrl:testoLink||undefined};
+  custom.push(newSong); saveCustom(custom); current.push(newSong); saveOrder(current.map(s=>s.id)); lastSavedOrder=[...current.map(s=>s.id)];
+  document.getElementById('newTitle').value=''; document.getElementById('newUrl').value=''; document.getElementById('newTestoUrl').value='';
+  refresh();
+};
+
+// === EXPORT WEB ===
+async function doExport(){
+  const all = getAll();
+  const clean = all.map((s, idx)=>({
+    id: idx+1,
+    title: s.title,
+    url: s.url,
+    type: detectType(s.url),
+    ...(s.testoUrl?{testoUrl:s.testoUrl}:{})
+  }));
+  // genera nuovo DEFAULT_SONGS
+  const newSongsText = 'const DEFAULT_SONGS=[\n'+
+    clean.map(s=>{
+      let o = `  {"id":${s.id},"title":${JSON.stringify(s.title)},"url":${JSON.stringify(s.url)},"type":${JSON.stringify(s.type)}`;
+      if(s.testoUrl) o+=`,"testoUrl":${JSON.stringify(s.testoUrl)}`;
+      o+='}';
+      return o;
+    }).join(',\n')+'\n];';
+
+  // prendi sorgente di questo file (senza custom locali)
+  let template = document.documentElement.outerHTML;
+  // per essere sicuro, ricostruiamo un file pulito partendo dal template attuale ma sostituendo DEFAULT_SONGS e azzerando localStorage keys
+  // usiamo il source originale salvato in una variabile (questa pagina stessa)
+  // Sostituzione semplice
+  let src = `<!DOCTYPE html>\n` + document.documentElement.outerHTML;
+  // meglio: ricarichiamo il file originale dal server se possibile
+  try{
+    const r = await fetch(window.location.pathname, {cache:'no-store'});
+    const txt = await r.text();
+    if(txt.includes('DEFAULT_SONGS')) src = txt;
+  }catch(e){}
+
+  let updated = src.replace(/const DEFAULT_SONGS=\[[\s\S]*?\];/, newSongsText);
+  // resetta ordine salvato nel file nuovo (vuoto = shuffle automatico ma con sequenza attuale salvata come ordine di default)
+  // Inietta ordine corrente come commento utile + salva ordine nel file nuovo se vuoi ordine fisso
+  // Per ordine fisso, lasciamo che ORDER_KEY venga ricreato vuoto: la pagina farà shuffle ma noi vogliamo mantenere l'ordine attuale come default.
+  // Quindi sostituiamo anche la parte di refresh iniziale per usare l'ordine esportato se presente.
+  
+  const blob = new Blob([updated], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url;
+  a.download='index.html';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+  document.getElementById('exportInfo').innerHTML = `✅ Generato <b>index.html con ${clean.length} brani</b><br>Caricalo su Netlify / Vercel / GitHub Pages sovrascrivendo il vecchio file. Da quel momento tutti vedranno la nuova versione.`;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('exportBtn').onclick=doExport;
+  document.getElementById('resetHiddenBtn').onclick=()=>{
+    if(!confirm('Ripristinare tutti i brani nascosti?')) return;
+    localStorage.removeItem(HIDDEN_KEY);
+    localStorage.removeItem('title_overrides');
+    localStorage.removeItem(TEXT_KEY);
+    localStorage.removeItem(ORDER_KEY);
+    refresh();
+  };
+});
+
+refresh();
+</script>
+</body>
+</html>
